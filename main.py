@@ -6,7 +6,7 @@ from Parser import Parser
 # """
 
 text_input = """
-print(2*1)
+print(Tree = "arbol")
 """
 
 lexer = Lexer().get_lexer()

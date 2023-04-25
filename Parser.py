@@ -8,10 +8,10 @@ class Parser():
         self.pg = ParserGenerator(
             # A list of all token names accepted by the parser.
             ['NUMBER', 'STRINGV', 'REALV',
-            # 'IDENTIFIER',
             'PROGRAM', 'IF', 'ELSE', 'THEN', 'DO', 'WHILE', 'END', 'PRINT',
             'AND', 'OR', 'INT', 'STRING', 'REAL', 'BOOL', 'TRUE', 'FALSE', 'FOR', 'MAIN',
             'PLUS', 'MINUS', 'MULT', 'DIV',
+            'IDENTIFIER',
             'SMALLERTHAN', 'GREATERTHAN', 'NOTEQ', 'EQUAL', 'SMALLEREQ', 'GREATEREQ',
             'OPAREN', 'CPAREN', 'HASHTAG', 'OBRACKET', 'CBRACKET', 'COLON', 'SEMICOLON',
             'DOT', 'QUOTE', 'COMMA', 'ASSIGN', 'NEWLINE'
@@ -44,12 +44,12 @@ class Parser():
         def expression_nested(p):
             return p[1]
         
-        # #   ASSIGNATION
-        # @self.pg.production('expression : IDENTIFIER ASSIGN expression')
-        # def expression_assign(p):
-        #     return Assign(p[0], p[2])
+        #   ASSIGN
+        @self.pg.production('expression : IDENTIFIER ASSIGN expression')
+        def expression_assign(p):
+            return Assign(Identifier(p[0]), p[2])
         
-        # ARITHMETIC PROGRAMS
+        #   ARITHMETIC PROGRAMS
         @self.pg.production('expression : expression PLUS expression')
         @self.pg.production('expression : expression MINUS expression')
         @self.pg.production('expression : expression MULT expression')
