@@ -95,13 +95,7 @@ class SymbolTable(BaseBox):
         print(self.dict.values())
         
     def assign(self, id, value):    # value must be assume None
-        # id = Identifier(id) # id is originally a str
-        
-        print("First id:" + id)
-        id = Identifier(id)
-        print("After: " + id.eval())
-        # self.dict[id.eval()].assign(value)
-        # self.dict[id.eval()].print()
+        id = Identifier(id) # id is originally a str
         # ----
         print(sytab.dict.keys())
         print(type(id.eval()))
@@ -141,9 +135,6 @@ class Declare:
         # return None
 
 class Assign(BinaryOp):
-    # def __init__(self, id, value):
-    #     self.id = Identifier(id)
-    #     self.value = value
     def eval(self):
         # evaluate the right-hand side expression
         value = self.right.eval()
@@ -168,17 +159,17 @@ class Assign(BinaryOp):
         return value
     
 class If:
-    def __init__(self, condition, body, else_body=None):
+    def __init__(self, condition, body, else_body):
         self.condition = condition
         self.body = body
         self.else_body = else_body
 
     def eval(self):
-        if self.condition.eval() == "true":
+        if self.condition.eval() is not bool(1):
             return self.body.eval()
         elif self.else_body is not None:
             return self.else_body.eval()
-        return Null()
+        return None
 
 class Sum(BinaryOp):
     def eval(self):

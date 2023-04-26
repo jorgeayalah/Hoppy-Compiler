@@ -14,7 +14,7 @@ class Parser():
             'PLUS', 'MINUS', 'MULT', 'DIV',
             'IDENTIFIER',
             'SMALLERTHAN', 'GREATERTHAN', 'NOTEQ', 'EQUAL', 'SMALLEREQ', 'GREATEREQ',
-            'OPAREN', 'CPAREN', 'HASHTAG', 'OBRACKET', 'CBRACKET', 'COLON', 'SEMICOLON',
+            'OPAREN', 'CPAREN', 'HASHTAG', 'OBRACES', 'CBRACES', 'COLON', 'SEMICOLON',
             'DOT', 'QUOTE', 'COMMA', 'ASSIGN', 'NEWLINE'
             ],
             precedence = [
@@ -37,6 +37,19 @@ class Parser():
         @self.pg.production('statement : expression')
         def statements(p):
             return(Statements(p))
+        
+        #   IF STATEMENT
+        @self.pg.production('statement : IF OPAREN expression CPAREN THEN OBRACES statement CBRACES else?')
+        @self.pg.production('statement : IF OPAREN expression CPAREN THEN OBRACES statement CBRACES')
+        def ifstatement(p):
+            if(len(p) == 9):
+                return If(p[2], p[6], p[8])
+            return If(p[2], p[6], None)
+            
+        
+        @self.pg.production('else? : ELSE OBRACES expression CBRACES')
+        def elsestatement(p):
+            return(p[2])
 
         #   DATATYPES
         @self.pg.production('expression : REALV')
@@ -96,7 +109,7 @@ class Parser():
         @self.pg.production('expression : type COLON COLON IDENTIFIER right_assignment')
         def declare_and_assign(p):
             Declare(p[0], p[3].getstr()).eval() #   First delclares, then assigns on symbolTable
-            print(sytab.dict.keys())
+            # print(sytab.dict.keys())
             return Assign(p[3].getstr(), p[4]) #p[3] 
         
         #   ASSIGNMENTS
