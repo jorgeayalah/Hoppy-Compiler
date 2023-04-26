@@ -26,10 +26,17 @@ class Parser():
         )
 
     def parse(self):
-        #   PRINT program
-        @self.pg.production('program : PROGRAM MAIN expression END PROGRAM MAIN')
+        #   PROGRAM program
+        @self.pg.production('program : PROGRAM MAIN statement END PROGRAM MAIN')
         def program(p):
-            return Print(p[2])
+            return(p[2])
+        
+        #   STATEMENTS
+        @self.pg.production('statement : statement statement') #second statement is a list
+        # @self.pg.production('statements : statement') #statements is a list with len = 1
+        @self.pg.production('statement : expression')
+        def statements(p):
+            return(Statements(p))
 
         #   DATATYPES
         @self.pg.production('expression : REALV')
@@ -61,7 +68,7 @@ class Parser():
         #   NESTED EXPRESSION W PARENTHESIS
         @self.pg.production('expression : OPAREN expression CPAREN')
         def expression_nested(p):
-            return p[1]
+            return(p[1])
         
         #   DECLARATION NONE (STATEMENT)
         @self.pg.production('expression : type COLON COLON moreIdentifiers')        
@@ -89,6 +96,7 @@ class Parser():
         @self.pg.production('expression : type COLON COLON IDENTIFIER right_assignment')
         def declare_and_assign(p):
             Declare(p[0], p[3]) #   First delclares, then assigns on symbolTable
+            print(sytab.dict.keys())
             return Assign(p[3], p[4]) #p[3] 
         
         #   ASSIGNMENTS
@@ -143,6 +151,11 @@ class Parser():
                 return GreaterEq(left, right)
             else:
                 raise AssertionError('Oops, this aint a beer REL!')
+        
+        #   PRINT
+        @self.pg.production('expression : PRINT OPAREN expression CPAREN')
+        def print_expr(p):
+            return Print(p[2])
 
         @self.pg.error
         def error_handle(token):

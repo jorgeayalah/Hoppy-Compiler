@@ -1,5 +1,14 @@
 from rply.token import BaseBox
 
+# ALL STATEMENTS
+class Statements:
+    def __init__(self, nodes):
+        self.nodes = nodes
+
+    def eval(self):
+        for node in self.nodes:
+            node.eval()
+
 #   DATATYPES
 class Real(BaseBox):
     def __init__(self, value):
@@ -86,8 +95,10 @@ class SymbolTable(BaseBox):
         print(self.dict.values())
         
     def assign(self, id, value):    # value must be assume None
-        id = Identifier(id)
-        self.dict[id.eval()].assign(value)
+        # id = Identifier(id) # id is originally a str
+        syVal = self.dict[id]
+        syVal.assign(value)
+        self.dict[id] = syVal.assign(value)
         print("y la q asigne")
         
     # def remove(self, id):
@@ -115,30 +126,50 @@ class Declare:
             # declare variable
             sytab.declare(self.id, self.type, None)
             print("declared successful")
+            print(sytab.dict.keys())
         else:
             raise ValueError("Right-hand side of declaration must be an Identifier.")
         # return None
 
 class Assign(BinaryOp):
+    # def __init__(self, id, value):
+    #     self.id = Identifier(id)
+    #     self.value = value
     def eval(self):
         # evaluate the right-hand side expression
         value = self.right.eval()
         
-        self.left = Identifier(self.left)
+        id = Identifier(self.left)
         # assign the value to the left-hand side variable
-        if isinstance(self.left, Identifier):
-            # declare variable
-            sytab.declare(self.left.eval(), type, None)
-            print("declared successful")
+        if isinstance(id, Identifier):
+            # variable is assumed to be already declared
+            # #checktype
+            # # datatype = sytab.dict[id].checkType()
+            # # if datatype == 'real':
+            # #     datatype = 'float'
+            # # if str(datatype) == type()
+            
             # assign variable
-            sytab.assign(self.left.eval(), value)
+            
+            sytab.assign(str(self.left), value)
             print("assignment successful")
-            #old set value
-            self.left.set_value(value)
         else:
             raise ValueError("Left-hand side of assignment must be an Identifier.")
 
         return value
+    
+class If:
+    def __init__(self, condition, body, else_body=None):
+        self.condition = condition
+        self.body = body
+        self.else_body = else_body
+
+    def eval(self):
+        if self.condition.eval() == "true":
+            return self.body.eval()
+        elif self.else_body is not None:
+            return self.else_body.eval()
+        return Null()
 
 class Sum(BinaryOp):
     def eval(self):
