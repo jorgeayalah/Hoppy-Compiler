@@ -1,19 +1,17 @@
 from Lexer import Lexer
 from Parser import Parser
+import os
 
-# text_input = """
-# print(4 + (5 * 2))
-# """
-
-text_input = """
-print(Tree = "arbol")
-"""
+# print("Current working directory:", os.getcwd())
+f = open("micompa/input.beer", "r")
+text_input = f.read()
 
 lexer = Lexer().get_lexer()
 pg = Parser()
 
 tokens = lexer.lex(text_input)
 
+# #   NEED TO RUN EITHER THIS BLOCK OR THE PARSING ONE
 # for token in tokens:
 #     print(token)
 

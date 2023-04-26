@@ -7,6 +7,7 @@ class Lexer():
         # data types
         self.lexer.add('REALV', r'\d+\.\d+')
         self.lexer.add('NUMBER', r'\d+')
+        self.lexer.add('BOOLV', r'true|false')
         self.lexer.add('STRINGV', r'\".*\"')
         
         # reserved words (keywords)
@@ -24,8 +25,8 @@ class Lexer():
         self.lexer.add('STRING', r'string')
         self.lexer.add('REAL', r'real') #float
         self.lexer.add('BOOL', r'bool')
-        self.lexer.add('TRUE', r'true')
-        self.lexer.add('FALSE', r'false')
+        # self.lexer.add('TRUE', r'true')
+        # self.lexer.add('FALSE', r'false')
         self.lexer.add('FOR', r'for')
         self.lexer.add('MAIN', r'main')
         

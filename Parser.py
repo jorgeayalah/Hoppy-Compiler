@@ -2,14 +2,15 @@ from rply import ParserGenerator
 from AST import Number, Sum, Sub, Mul, Div, Smaller, Greater, Noteq, Equal, SmallerEq, GreaterEq, Print
 from AST import *
 
-
 class Parser():
     def __init__(self):
         self.pg = ParserGenerator(
             # A list of all token names accepted by the parser.
-            ['NUMBER', 'STRINGV', 'REALV',
+            ['NUMBER', 'STRINGV', 'REALV', 'BOOLV',
             'PROGRAM', 'IF', 'ELSE', 'THEN', 'DO', 'WHILE', 'END', 'PRINT',
-            'AND', 'OR', 'INT', 'STRING', 'REAL', 'BOOL', 'TRUE', 'FALSE', 'FOR', 'MAIN',
+            'AND', 'OR', 'INT', 'STRING', 'REAL', 'BOOL', 
+            # 'TRUE', 'FALSE', 
+            'FOR', 'MAIN',
             'PLUS', 'MINUS', 'MULT', 'DIV',
             'IDENTIFIER',
             'SMALLERTHAN', 'GREATERTHAN', 'NOTEQ', 'EQUAL', 'SMALLEREQ', 'GREATEREQ',
@@ -17,36 +18,55 @@ class Parser():
             'DOT', 'QUOTE', 'COMMA', 'ASSIGN', 'NEWLINE'
             ],
             precedence = [
+                ('left', ['OR']),
+                ('left', ['AND']),
                 ('left', ['PLUS', 'MINUS']),
                 ('left', ['MUL', 'DIV'])
             ]
         )
 
     def parse(self):
-        # PRINT program
-        @self.pg.production('program : PRINT OPAREN expression CPAREN')
+        #   PRINT program
+        @self.pg.production('program : PROGRAM MAIN expression END PROGRAM MAIN')
         def program(p):
             return Print(p[2])
 
         #   DATATYPES
+        @self.pg.production('expression : REALV')
+        def expression_realv(p):
+            # p is a list of the pieces matched by the right hand side of the rule
+            return Real(float(p[0].getstr()))
+        
         @self.pg.production('expression : NUMBER')
         def expression_number(p):
-            # p is a list of the pieces matched by the right hand side of the
-            # rule
+            # p is a list of the pieces matched by the right hand side of the rule
             return Number(int(p[0].getstr()))
         
         @self.pg.production('expression : STRINGV')
         def expression_stringv(p):
             return String(p[0].getstr())
         
-        # NESTED EXPRESSION W PARENTHESIS
+        @self.pg.production('expression : BOOLV')
+        def expression_boolv(p):
+            return Bool(p[0].getstr())  # process everything as true
+        
+        #   NESTED EXPRESSION W PARENTHESIS
         @self.pg.production('expression : OPAREN expression CPAREN')
         def expression_nested(p):
             return p[1]
         
-        #   ASSIGN
-        @self.pg.production('expression : IDENTIFIER ASSIGN expression')
-        def expression_assign(p):
+        #   DECLARATION (STATEMENT)
+        @self.pg.production('expression : INT COLON COLON assignment')
+        @self.pg.production('expression : STRING COLON COLON assignment')
+        @self.pg.production('expression : REAL COLON COLON assignment')
+        @self.pg.production('expression : BOOL COLON COLON assignment')
+        def declaration(p):
+            print("y la que declare")
+            return p[3]
+        
+        #   ASSIGNMENT
+        @self.pg.production('assignment : IDENTIFIER ASSIGN expression')
+        def assignment(p):
             return Assign(Identifier(p[0]), p[2])
         
         #   ARITHMETIC PROGRAMS
@@ -96,11 +116,6 @@ class Parser():
                 return GreaterEq(left, right)
             else:
                 raise AssertionError('Oops, this aint a beer REL!')
-        
-        
-        # @self.pg.production('expression : NUMBER')
-        # def number(p):
-        #     return Number(p[0].value)
 
         @self.pg.error
         def error_handle(token):
@@ -108,3 +123,9 @@ class Parser():
 
     def get_parser(self):
         return self.pg.build()
+    
+"""
+Manejar la traducción de expresiones booleanas par las proposiciones if-then
+mediante flujo del control, es decir si E1 or E2, donde E1 es verdedero, no 
+llegar a evaluar E2.
+"""
