@@ -80,6 +80,7 @@ class SymbolTable(BaseBox):
         
     def declare(self, id, type, value):    # value must be assume None
         id = Identifier(id)
+        print(id.eval())
         self.dict[id.eval()] = SymbolValue(type, value)
         print("Values: ")
         print(self.dict.values())
@@ -104,16 +105,19 @@ class UnaryOp(BaseBox):
         self.left = left
         self.right = right
 
-class Declare(BinaryOp):
-    def eval(self):        
-        # 
-        if isinstance(self.right, Identifier):
+class Declare:
+    def __init__(self, type, id):
+        self.type = type
+        self.id = Identifier(id)
+    def eval(self):    
+        print("AST Declare entries: " + self.id.eval())
+        if isinstance(self.id, Identifier):  #left is type, right is ID
             # declare variable
-            sytab.declare(self.right, self.left.eval(), None)
+            sytab.declare(self.id, self.type, None)
             print("declared successful")
         else:
             raise ValueError("Right-hand side of declaration must be an Identifier.")
-        return None
+        # return None
 
 class Assign(BinaryOp):
     def eval(self):
@@ -177,7 +181,6 @@ class GreaterEq(BinaryOp):
     def eval(self):
         return self.left.eval() >= self.right.eval()
     
-
 
 #   Print
 class Print():

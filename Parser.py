@@ -66,15 +66,19 @@ class Parser():
         #   DECLARATION NONE (STATEMENT)
         @self.pg.production('expression : type COLON COLON moreIdentifiers')        
         def declaration_none(p):
-            print("y la que declare")
-            for x in p[3]:
-                Declare(p[0], x)
+            # print("Production Declaration")
+            listids = p[3]
+            for x in listids:
+                print("id: " + x)
+                Declare(p[0], x).eval()
+                print("Parser declared")
+                print(sytab.dict.values())
             return
         
         #   LIST OF IDENTIFIERS
         @self.pg.production('moreIdentifiers : IDENTIFIER COMMA moreIdentifiers')
         def moreIdentifiers(p):
-            return(p[0].getstr() + p[2])    #   TypeError: unsupported operand type(s) for +: 'Identifier' and 'list'
+            return([p[0].getstr()] + p[2])    #   TypeError: unsupported operand type(s) for +: 'Identifier' and 'list'
         
         #   ATOMIC IDENTIFIER
         @self.pg.production('moreIdentifiers : IDENTIFIER')
