@@ -96,9 +96,18 @@ class SymbolTable(BaseBox):
         
     def assign(self, id, value):    # value must be assume None
         # id = Identifier(id) # id is originally a str
-        syVal = self.dict[id]
+        
+        print("First id:" + id)
+        id = Identifier(id)
+        print("After: " + id.eval())
+        # self.dict[id.eval()].assign(value)
+        # self.dict[id.eval()].print()
+        # ----
+        print(sytab.dict.keys())
+        print(type(id.eval()))
+        syVal = self.dict[id.eval()]
         syVal.assign(value)
-        self.dict[id] = syVal.assign(value)
+        self.dict[id.eval()] = syVal
         print("y la q asigne")
         
     # def remove(self, id):
@@ -124,7 +133,7 @@ class Declare:
         print("AST Declare entries: " + self.id.eval())
         if isinstance(self.id, Identifier):  #left is type, right is ID
             # declare variable
-            sytab.declare(self.id, self.type, None)
+            sytab.declare(self.id.eval(), self.type, None)
             print("declared successful")
             print(sytab.dict.keys())
         else:

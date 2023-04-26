@@ -95,9 +95,9 @@ class Parser():
         #   DECLARATION AND ASSIGNMENT
         @self.pg.production('expression : type COLON COLON IDENTIFIER right_assignment')
         def declare_and_assign(p):
-            Declare(p[0], p[3]) #   First delclares, then assigns on symbolTable
+            Declare(p[0], p[3].getstr()).eval() #   First delclares, then assigns on symbolTable
             print(sytab.dict.keys())
-            return Assign(p[3], p[4]) #p[3] 
+            return Assign(p[3].getstr(), p[4]) #p[3] 
         
         #   ASSIGNMENTS
         @self.pg.production('right_assignment : ASSIGN expression')  #needed to maintain left
