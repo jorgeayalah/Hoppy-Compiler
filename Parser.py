@@ -74,18 +74,18 @@ class Parser():
         #   LIST OF IDENTIFIERS
         @self.pg.production('moreIdentifiers : IDENTIFIER COMMA moreIdentifiers')
         def moreIdentifiers(p):
-            return(Identifier(p[0].getstr()) + p[2])    #   TypeError: unsupported operand type(s) for +: 'Identifier' and 'list'
+            return(p[0].getstr() + p[2])    #   TypeError: unsupported operand type(s) for +: 'Identifier' and 'list'
         
         #   ATOMIC IDENTIFIER
         @self.pg.production('moreIdentifiers : IDENTIFIER')
         def atomic_identifier(p):
-            return([Identifier(p[0].getstr())])
+            return([p[0].getstr()])
         
         #   DECLARATION AND ASSIGNMENT
         @self.pg.production('expression : type COLON COLON IDENTIFIER right_assignment')
         def declare_and_assign(p):
-            Declare(p[0], Identifier(p[3])) #   First delclares, then assigns on symbolTable
-            return Assign(Identifier(p[3]), p[4]) #p[3] 
+            Declare(p[0], p[3]) #   First delclares, then assigns on symbolTable
+            return Assign(p[3], p[4]) #p[3] 
         
         #   ASSIGNMENTS
         @self.pg.production('right_assignment : ASSIGN expression')  #needed to maintain left

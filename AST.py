@@ -35,7 +35,7 @@ class Identifier(BaseBox):
         self.value = value
 
     def eval(self):
-        return self.value 
+        return str(self.value) 
     
     def set_value(self, value): 
         self.value = value
@@ -79,12 +79,14 @@ class SymbolTable(BaseBox):
         self.dict = {}
         
     def declare(self, id, type, value):    # value must be assume None
-        self.dict[id.getstr()] = SymbolValue(type, value)
+        id = Identifier(id)
+        self.dict[id.eval()] = SymbolValue(type, value)
         print("Values: ")
         print(self.dict.values())
         
     def assign(self, id, value):    # value must be assume None
-        self.dict[id.getstr()].assign(value)
+        id = Identifier(id)
+        self.dict[id.eval()].assign(value)
         print("y la q asigne")
         
     # def remove(self, id):
@@ -118,6 +120,7 @@ class Assign(BinaryOp):
         # evaluate the right-hand side expression
         value = self.right.eval()
         
+        self.left = Identifier(self.left)
         # assign the value to the left-hand side variable
         if isinstance(self.left, Identifier):
             # declare variable
@@ -136,7 +139,6 @@ class Assign(BinaryOp):
 class Sum(BinaryOp):
     def eval(self):
         return self.left.eval() + self.right.eval()
-
 
 class Sub(BinaryOp):
     def eval(self):
