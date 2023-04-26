@@ -50,24 +50,47 @@ class Parser():
         def expression_boolv(p):
             return Bool(p[0].getstr())  # process everything as true
         
+        #   TYPES
+        @self.pg.production('type : INT')
+        @self.pg.production('type : STRING')
+        @self.pg.production('type : REAL')
+        @self.pg.production('type : BOOL')
+        def type(p):
+            return p[0].getstr()
+        
         #   NESTED EXPRESSION W PARENTHESIS
         @self.pg.production('expression : OPAREN expression CPAREN')
         def expression_nested(p):
             return p[1]
         
-        #   DECLARATION (STATEMENT)
-        @self.pg.production('expression : INT COLON COLON assignment')
-        @self.pg.production('expression : STRING COLON COLON assignment')
-        @self.pg.production('expression : REAL COLON COLON assignment')
-        @self.pg.production('expression : BOOL COLON COLON assignment')
-        def declaration(p):
+        #   DECLARATION NONE (STATEMENT)
+        @self.pg.production('expression : type COLON COLON moreIdentifiers')        
+        def declaration_none(p):
             print("y la que declare")
-            return p[3]
+            for x in p[3]:
+                Declare(p[0], x)
+            return
         
-        #   ASSIGNMENT
-        @self.pg.production('assignment : IDENTIFIER ASSIGN expression')
-        def assignment(p):
-            return Assign(Identifier(p[0]), p[2])
+        #   LIST OF IDENTIFIERS
+        @self.pg.production('moreIdentifiers : IDENTIFIER COMMA moreIdentifiers')
+        def moreIdentifiers(p):
+            return(Identifier(p[0].getstr()) + p[2])    #   TypeError: unsupported operand type(s) for +: 'Identifier' and 'list'
+        
+        #   ATOMIC IDENTIFIER
+        @self.pg.production('moreIdentifiers : IDENTIFIER')
+        def atomic_identifier(p):
+            return([Identifier(p[0].getstr())])
+        
+        #   DECLARATION AND ASSIGNMENT
+        @self.pg.production('expression : type COLON COLON IDENTIFIER right_assignment')
+        def declare_and_assign(p):
+            Declare(p[0], Identifier(p[3])) #   First delclares, then assigns on symbolTable
+            return Assign(Identifier(p[3]), p[4]) #p[3] 
+        
+        #   ASSIGNMENTS
+        @self.pg.production('right_assignment : ASSIGN expression')  #needed to maintain left
+        def right_assignment(p):
+            return(p[1])
         
         #   ARITHMETIC PROGRAMS
         @self.pg.production('expression : expression PLUS expression')

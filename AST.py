@@ -96,21 +96,22 @@ class BinaryOp(BaseBox):
     def __init__(self, left, right):
         self.left = left
         self.right = right
+        
+class UnaryOp(BaseBox):
+    def __init__(self, left, right):
+        self.left = left
+        self.right = right
 
 class Declare(BinaryOp):
-    def eval(self):
-        # evaluate the right-hand side expression
-        value = self.right.eval()
-        
-        # assign the value to the left-hand side variable
-        if isinstance(self.left, Identifier):
+    def eval(self):        
+        # 
+        if isinstance(self.right, Identifier):
             # declare variable
-            sytab.declare(self.left.eval(), type, None)
+            sytab.declare(self.right, self.left.eval(), None)
             print("declared successful")
         else:
             raise ValueError("Right-hand side of declaration must be an Identifier.")
-
-        return value
+        return None
 
 class Assign(BinaryOp):
     def eval(self):

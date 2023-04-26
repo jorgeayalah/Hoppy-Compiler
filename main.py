@@ -1,6 +1,6 @@
 from Lexer import Lexer
 from Parser import Parser
-import os
+# import os
 
 # print("Current working directory:", os.getcwd())
 f = open("micompa/input.beer", "r")
@@ -18,3 +18,4 @@ tokens = lexer.lex(text_input)
 pg.parse()
 parser = pg.get_parser()
 parser.parse(tokens).eval()
+# print()
