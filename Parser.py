@@ -47,7 +47,7 @@ class Parser():
             return If(p[2], p[6], None)
             
         
-        @self.pg.production('else? : ELSE OBRACES expression CBRACES')
+        @self.pg.production('else? : ELSE OBRACES statement CBRACES')
         def elsestatement(p):
             return(p[2])
         
@@ -133,12 +133,14 @@ class Parser():
         def right_assignment(p):
             return(p[1])
         
-        #   ARITHMETIC PROGRAMS
+        #   ARITHMETIC and REL PROGRAMS
         @self.pg.production('expression : expression PLUS expression')
         @self.pg.production('expression : expression MINUS expression')
         @self.pg.production('expression : expression MULT expression')
         @self.pg.production('expression : expression DIV expression')
-        def expression_arith(p):
+        @self.pg.production('expression : expression AND expression')
+        @self.pg.production('expression : expression OR expression')
+        def expression_arith_rel(p):
             left = p[0]
             right = p[2]
             operator = p[1]
@@ -151,6 +153,10 @@ class Parser():
                 return Mul(left, right)
             elif operator.gettokentype() == 'DIV':
                 return Div(left, right)
+            elif operator.gettokentype() == 'AND':
+                return And(left, right)
+            elif operator.gettokentype() == 'OR':
+                return Or(left, right)
             else:
                 raise AssertionError('Oops, this aint a beer!')
 

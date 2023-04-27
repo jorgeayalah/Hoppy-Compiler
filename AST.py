@@ -36,7 +36,7 @@ class Bool(BaseBox):
         self.value = value
 
     def eval(self):
-        return True if self.value == True else False
+        return True if self.value == "true" else False
 
 #   IDENTIFIER
 class Identifier(BaseBox):
@@ -171,7 +171,7 @@ class If:
             return self.body.eval()
         elif self.else_body is not None:
             return self.else_body.eval()
-        return None
+        # return None
 
 class WhileLoop:
     def __init__(self, condition, function):
@@ -207,6 +207,20 @@ class Variable:
             return var.eval()
         else: 
             raise RuntimeError("Variable not declared:", self.id)
+
+class And(BinaryOp):
+    def eval(self):
+        if isinstance(self.left.eval(), Bool) and isinstance(self.right.eval(), Bool):
+            return(self.left.eval() and self.right.eval())
+        else: 
+            raise RuntimeError("One of the expressions is not boolean AND")
+        
+class Or(BinaryOp):
+    def eval(self):
+        if isinstance(self.left.eval(), Bool) and isinstance(self.right.eval(), Bool):
+            return(self.left.eval() or self.right.eval())
+        else: 
+            raise RuntimeError("One of the expressions is not boolean OR")
 
 class Sum(BinaryOp):
     def eval(self):
