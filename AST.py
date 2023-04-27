@@ -58,13 +58,13 @@ class SymbolValue(BaseBox): #   The linked "row" in the 'value' of the hash tabl
         
     def eval(self):
         if self.value is not None:
-            if self.type == "int":
+            if self.type == "pint":
                 return int(self.value)
-            elif self.type == "real":
+            elif self.type == "dizzy":
                 return float(self.value)
-            elif self.type == "string":
+            elif self.type == "strong":
                 return float(self.value)
-            elif self.type == "bool":
+            elif self.type == "fool":
                 return bool(self.value)
             else:
                 raise ValueError("Value is not a valid type")
@@ -125,7 +125,7 @@ class Declare:
         if isinstance(self.id, Identifier):  #left is type, right is ID
             # declare variable
             #   official values when declared and not assign from C++
-            if self.type == 'int' or self.type == 'bool':
+            if self.type == 'pint' or self.type == 'fool':
                 sytab.declare(self.id.eval(), self.type, 0)
             elif self.type == 'real':
                 sytab.declare(self.id.eval(), self.type, 4.94066*pow(10, (-324)))   #-324
@@ -239,7 +239,7 @@ class Noteq(BinaryOp):
     
 class Equal(BinaryOp):
     def eval(self):
-        return self.left.eval() == self.right.eval()
+        return self.left.eval().__eq__(self.right.eval())
 
 class SmallerEq(BinaryOp):
     def eval(self):

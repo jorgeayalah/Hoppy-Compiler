@@ -1,0 +1,11 @@
+recipe ipa
+pint :: i,n,f,x
+pour("texto dump")
+f=1
+x=5
+while-sober (x<f) chug
+{
+	x = f + 2
+}
+pour(n)
+damn recipe ipa

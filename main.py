@@ -26,6 +26,6 @@ tokens = lexer.lex(text_input)
 # for token in tokens:
 #     print(token)
 
-# pg.parse()
-# parser = pg.get_parser()
-# parser.parse(tokens).eval()
+pg.parse()
+parser = pg.get_parser()
+parser.parse(tokens).eval()

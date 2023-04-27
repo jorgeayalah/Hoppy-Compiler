@@ -1,12 +1,11 @@
 program main
-int :: i,n
-real :: x
-string :: greeting
-bool :: yes, no, idk
-
+int :: i,n,f,x
+print("texto dump")
+f=1
+x=5
+while (x<f) do
+{
+	x = f + 2
+}
 print(n)
-print(x)
-print(greeting)
-print(no)
-
 end program main
