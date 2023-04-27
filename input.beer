@@ -1,4 +1,5 @@
 program main
 int :: x = 5
+y = x - 2
 print(x)
 end program main

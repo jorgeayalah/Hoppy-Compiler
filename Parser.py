@@ -125,8 +125,13 @@ class Parser():
         @self.pg.production('expression : type COLON COLON IDENTIFIER right_assignment')
         def declare_and_assign(p):
             Declare(p[0], p[3].getstr()).eval() #   First delclares, then assigns on symbolTable
-            # print(sytab.dict.keys())
             return Assign(p[3].getstr(), p[4]) #p[3] 
+        
+        #   ASSIGNMENT (AND RE-ASSIGNMENT)
+        @self.pg.production('expression : IDENTIFIER right_assignment')
+        def assign_or_reassign(p):
+            #    verifies variable exist before assignment
+            return Assign(p[0].getstr(), p[1]) #p[3] 
         
         #   ASSIGNMENTS
         @self.pg.production('right_assignment : ASSIGN expression')  #needed to maintain left

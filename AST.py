@@ -149,9 +149,11 @@ class Assign(BinaryOp):
             # #     datatype = 'float'
             # # if str(datatype) == type()
             
-            # assign variable
-            
-            sytab.assign(str(self.left), value)
+            # check if variable is declared in symbol table
+            if(id.eval() in sytab.dict.keys()):
+                sytab.assign(id.eval(), value)  #   assigns new value to declaration
+            else: 
+                raise RuntimeError("Variable not declared can not be assigned: ", id.eval())
             print("assignment successful")
         else:
             raise ValueError("Left-hand side of assignment must be an Identifier.")
