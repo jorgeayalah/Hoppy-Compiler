@@ -50,6 +50,11 @@ class Parser():
         @self.pg.production('else? : ELSE OBRACES expression CBRACES')
         def elsestatement(p):
             return(p[2])
+        
+        #   WHILE
+        @self.pg.production('statement : WHILE OPAREN expression CPAREN DO OBRACES statement CBRACES')
+        def while_statement(p):
+            return WhileLoop(p[2], p[6])
 
         #   DATATYPES
         @self.pg.production('expression : REALV')
@@ -78,6 +83,10 @@ class Parser():
         def type(p):
             return p[0].getstr()
         
+        @self.pg.production('expression : IDENTIFIER')
+        def identifier_variable(p):
+            return Variable(p[0])  # atomic identifier already existing
+        
         #   NESTED EXPRESSION W PARENTHESIS
         @self.pg.production('expression : OPAREN expression CPAREN')
         def expression_nested(p):
@@ -88,9 +97,10 @@ class Parser():
         def declaration_none(p):
             # print("Production Declaration")
             listids = p[3]
+            
             for x in listids:
                 print("id: " + x)
-                Declare(p[0], x).eval()
+                Declare(p[0], x).eval()             # CORREGIR PARA PODER DECLARAR "int :: x, y, z"
                 print("Parser declared")
                 print(sytab.dict.values())
             return
@@ -104,6 +114,12 @@ class Parser():
         @self.pg.production('moreIdentifiers : IDENTIFIER')
         def atomic_identifier(p):
             return([p[0].getstr()])
+        #
+        # @self.pg.production('expression : IDENTIFIER')
+        # def atomic_declared_identifier(p):
+        #     if sytab.dict[p[0].getstr()] is not None:
+        #         return sytab.dict[p[0].getstr()].eval()
+        #     raise AssertionError('Oops, beer ID non existing!')
         
         #   DECLARATION AND ASSIGNMENT
         @self.pg.production('expression : type COLON COLON IDENTIFIER right_assignment')

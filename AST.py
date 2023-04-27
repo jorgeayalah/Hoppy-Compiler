@@ -91,8 +91,8 @@ class SymbolTable(BaseBox):
         id = Identifier(id)
         print(id.eval())
         self.dict[id.eval()] = SymbolValue(type, value)
-        print("Values: ")
-        print(self.dict.values())
+        # print("Values: ")
+        # print(self.dict.values())
         
     def assign(self, id, value):    # value must be assume None
         id = Identifier(id) # id is originally a str
@@ -170,6 +170,35 @@ class If:
         elif self.else_body is not None:
             return self.else_body.eval()
         return None
+
+class WhileLoop:
+    def __init__(self, condition, while_body):
+        self.condition = condition
+        self.while_body = while_body
+
+    def eval(self):
+        while(self.condition == bool(1)):   #   if true, do body
+            self.while_body.eval()
+
+class ForLoop:
+    def __init__(self, time, function):
+        self.time = time
+        self.function = function
+        
+    def eval(self):
+        for x in range(self.time.eval()):
+            self.function.eval()
+        
+class Variable:
+    def __init__(self, id):
+        self.id = id.getstr()
+    
+    def eval(self):
+        if self.id in sytab.dict.keys():
+            var = sytab.dict[self.id]
+            return var.eval()
+        else: 
+            raise RuntimeError("Variable not declared:", self.id)
 
 class Sum(BinaryOp):
     def eval(self):
