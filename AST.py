@@ -90,7 +90,6 @@ class SymbolTable(BaseBox):
         
     def declare(self, id, type, value):    # value must be assume None
         id = Identifier(id)
-        print(id.eval())
         self.dict[id.eval()] = SymbolValue(type, value)
         
     def assign(self, id, value):    # value must be assume None
@@ -125,8 +124,13 @@ class Declare:
         # print("AST Declare entries: " + self.id.eval())
         if isinstance(self.id, Identifier):  #left is type, right is ID
             # declare variable
-            sytab.declare(self.id.eval(), self.type, None)
-            # print(sytab.dict.keys())
+            #   official values when declared and not assign from C++
+            if self.type == 'int' or self.type == 'bool':
+                sytab.declare(self.id.eval(), self.type, 0)
+            elif self.type == 'real':
+                sytab.declare(self.id.eval(), self.type, 4.94066*pow(10, (-324)))   #-324
+            else:   #   'string' and others
+                sytab.declare(self.id.eval(), self.type, None)
         else:
             raise ValueError("Right-hand side of declaration must be an Identifier.")
         return self.id

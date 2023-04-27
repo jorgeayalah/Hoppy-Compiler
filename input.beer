@@ -1,14 +1,7 @@
 program main
-int :: i,n,f,x
-print("texto dump")
-f=1
-x=5
-print(x > f)
-if( x > f) then 
-{
-	n = x + f
-}else{
-	n = x - 10
-}
+int :: i,n
+real :: x
 print(n)
+print(x)
+
 end program main

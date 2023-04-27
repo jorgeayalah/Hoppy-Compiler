@@ -54,14 +54,12 @@ class Parser():
         #   WHILE LOOP
         @self.pg.production('statement : WHILE OPAREN expression CPAREN DO OBRACES statement CBRACES')
         def while_statement(p):
-            print("while detected")
             return WhileLoop(p[2], p[6])
         
         #   FOR LOOP
         #   second expression should be fixed to an assignation with a procedure
         @self.pg.production('statement : FOR OPAREN IDENTIFIER SEMICOLON expression SEMICOLON expression CPAREN OBRACES statement CBRACES')
         def for_statement(p):
-            print("for detected")
             return ForLoop(p[2], p[4], p[6], p[9])
 
         #   DATATYPES
