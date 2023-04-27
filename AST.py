@@ -57,17 +57,18 @@ class SymbolValue(BaseBox): #   The linked "row" in the 'value' of the hash tabl
         self.value = value if value is not None else None 
         
     def eval(self):
-        if self.type == "int":
-            return int(self.value)
-        elif self.type == "real":
-            return float(self.value)
-        elif self.type == "string":
-            return float(self.value)
-        elif self.type == "bool":
-            return float(self.value)
-        else:
-            return None
-        
+        if self.value is not None:
+            if self.type == "int":
+                return int(self.value)
+            elif self.type == "real":
+                return float(self.value)
+            elif self.type == "string":
+                return float(self.value)
+            elif self.type == "bool":
+                return float(self.value)
+            else:
+                raise ValueError("Value is not a valid type")
+        return None
     def checkType(self):
         return self.type
     
@@ -98,8 +99,10 @@ class SymbolTable(BaseBox):
         syVal = self.dict[id.eval()]
         syVal.assign(value)
         self.dict[id.eval()] = syVal
-        
+    
     # def remove(self, id):
+    def eval(self):
+        return self.dict
 
 sytab = SymbolTable()
 
@@ -119,15 +122,14 @@ class Declare:
         self.type = type
         self.id = Identifier(id)
     def eval(self):    
-        print("AST Declare entries: " + self.id.eval())
+        # print("AST Declare entries: " + self.id.eval())
         if isinstance(self.id, Identifier):  #left is type, right is ID
             # declare variable
             sytab.declare(self.id.eval(), self.type, None)
-            print("declared successful")
-            print(sytab.dict.keys())
+            # print(sytab.dict.keys())
         else:
             raise ValueError("Right-hand side of declaration must be an Identifier.")
-        # return None
+        return self.id
 
 class Assign(BinaryOp):
     def eval(self):
@@ -149,7 +151,6 @@ class Assign(BinaryOp):
                 sytab.assign(id.eval(), value)  #   assigns new value to declaration
             else: 
                 raise RuntimeError("Variable not declared can not be assigned: ", id.eval())
-            print("assignment successful")
         else:
             raise ValueError("Left-hand side of assignment must be an Identifier.")
 
@@ -162,7 +163,7 @@ class If:
         self.else_body = else_body
 
     def eval(self):
-        if self.condition.eval() is not bool(1):
+        if self.condition.eval() is bool(1):
             return self.body.eval()
         elif self.else_body is not None:
             return self.else_body.eval()

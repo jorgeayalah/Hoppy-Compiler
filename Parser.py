@@ -1,5 +1,5 @@
 from rply import ParserGenerator
-from AST import Number, Sum, Sub, Mul, Div, Smaller, Greater, Noteq, Equal, SmallerEq, GreaterEq, Print
+# from AST import Number, Sum, Sub, Mul, Div, Smaller, Greater, Noteq, Equal, SmallerEq, GreaterEq, Print
 from AST import *
 
 class Parser():
@@ -62,7 +62,6 @@ class Parser():
         @self.pg.production('statement : FOR OPAREN IDENTIFIER SEMICOLON expression SEMICOLON expression CPAREN OBRACES statement CBRACES')
         def for_statement(p):
             print("for detected")
-            print(p[2], p[4], p[6], p[9])
             return ForLoop(p[2], p[4], p[6], p[9])
 
         #   DATATYPES
@@ -104,15 +103,10 @@ class Parser():
         #   DECLARATION NONE (STATEMENT)
         @self.pg.production('expression : type COLON COLON moreIdentifiers')        
         def declaration_none(p):
-            # print("Production Declaration")
             listids = p[3]
-            
             for x in listids:
-                print("id: " + x)
                 Declare(p[0], x).eval()             # CORREGIR PARA PODER DECLARAR "int :: x, y, z"
-                print("Parser declared")
-                print(sytab.dict.values())
-            return
+            return sytab
         
         #   LIST OF IDENTIFIERS
         @self.pg.production('moreIdentifiers : IDENTIFIER COMMA moreIdentifiers')
