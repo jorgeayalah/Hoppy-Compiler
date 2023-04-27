@@ -13,7 +13,7 @@ for line in open('micompa/Translator/rosettaStone.txt'):
         translate[fortran] = hoppy[:-1] #   not used by the moment
 
 # Write the file out again
-with open('micompa/Translator/input_hoppy.txt', 'w') as file:
+with open('micompa/Translator/input_hoppy.hppy', 'w') as file:
   file.write(text_input)
 
 
