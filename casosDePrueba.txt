@@ -2,7 +2,7 @@
 
 program main
 if(10 > 2) then {
-    if( 10 * 2 == 20) then {
+    if( 40 / 2 == 20) then {
         print("q ricos los Lindor")
     }
     print("first es mayor")
