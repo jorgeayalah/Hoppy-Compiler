@@ -91,18 +91,13 @@ class SymbolTable(BaseBox):
         id = Identifier(id)
         print(id.eval())
         self.dict[id.eval()] = SymbolValue(type, value)
-        # print("Values: ")
-        # print(self.dict.values())
         
     def assign(self, id, value):    # value must be assume None
         id = Identifier(id) # id is originally a str
         # ----
-        print(sytab.dict.keys())
-        print(type(id.eval()))
         syVal = self.dict[id.eval()]
         syVal.assign(value)
         self.dict[id.eval()] = syVal
-        print("y la q asigne")
         
     # def remove(self, id):
 
@@ -179,7 +174,7 @@ class WhileLoop:
         self.while_body = while_body
 
     def eval(self):
-        while(self.condition == bool(1)):   #   if true, do body
+        while(self.condition.eval() is True):   #   if true, do body
             self.while_body.eval()
 
 class ForLoop:

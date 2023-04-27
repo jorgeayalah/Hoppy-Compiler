@@ -1,5 +1,8 @@
 program main
-int :: x = 5
-y = x - 2
-print(x)
+int :: x = 15
+while(x > 10) do {
+    print("hola")
+    x = x - 1
+    print(x)
+}
 end program main

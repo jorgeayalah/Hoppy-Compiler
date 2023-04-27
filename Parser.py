@@ -54,6 +54,7 @@ class Parser():
         #   WHILE
         @self.pg.production('statement : WHILE OPAREN expression CPAREN DO OBRACES statement CBRACES')
         def while_statement(p):
+            print("while detected")
             return WhileLoop(p[2], p[6])
 
         #   DATATYPES
@@ -114,18 +115,12 @@ class Parser():
         @self.pg.production('moreIdentifiers : IDENTIFIER')
         def atomic_identifier(p):
             return([p[0].getstr()])
-        #
-        # @self.pg.production('expression : IDENTIFIER')
-        # def atomic_declared_identifier(p):
-        #     if sytab.dict[p[0].getstr()] is not None:
-        #         return sytab.dict[p[0].getstr()].eval()
-        #     raise AssertionError('Oops, beer ID non existing!')
         
         #   DECLARATION AND ASSIGNMENT
         @self.pg.production('expression : type COLON COLON IDENTIFIER right_assignment')
         def declare_and_assign(p):
             Declare(p[0], p[3].getstr()).eval() #   First delclares, then assigns on symbolTable
-            return Assign(p[3].getstr(), p[4]) #p[3] 
+            return Assign(p[3].getstr(), p[4])
         
         #   ASSIGNMENT (AND RE-ASSIGNMENT)
         @self.pg.production('expression : IDENTIFIER right_assignment')
@@ -133,7 +128,7 @@ class Parser():
             #    verifies variable exist before assignment
             return Assign(p[0].getstr(), p[1]) #p[3] 
         
-        #   ASSIGNMENTS
+        #   RIGHT-SIDE ASSIGNMENT
         @self.pg.production('right_assignment : ASSIGN expression')  #needed to maintain left
         def right_assignment(p):
             return(p[1])
@@ -174,7 +169,7 @@ class Parser():
             if operator.gettokentype() == 'SMALLERTHAN':
                 return Smaller(left, right)
             elif operator.gettokentype() == 'GREATERTHAN':
-                return Equal(left, right)
+                return Greater(left, right)
             elif operator.gettokentype() == 'NOTEQ':
                 return Noteq(left, right)
             elif operator.gettokentype() == 'EQUAL':
