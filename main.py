@@ -6,6 +6,17 @@ from Parser import Parser
 f = open("micompa/input.hppy", "r")
 text_input = f.read()
 
+translate = {}
+for line in open('micompa/Translator/rosettaStone.txt'):
+        fortran, hoppy = line.split(',')
+        text_input = text_input.replace(str(fortran), str(hoppy[:-1]))  #   [:-1] is for avoiding '/n'
+        translate[fortran] = hoppy[:-1] #   not used by the moment
+
+# Write the file out again
+with open('micompa/Translator/input_hoppy.txt', 'w') as file:
+  file.write(text_input)
+
+
 lexer = Lexer().get_lexer()
 pg = Parser()
 
@@ -15,6 +26,6 @@ tokens = lexer.lex(text_input)
 # for token in tokens:
 #     print(token)
 
-pg.parse()
-parser = pg.get_parser()
-parser.parse(tokens).eval()
+# pg.parse()
+# parser = pg.get_parser()
+# parser.parse(tokens).eval()
