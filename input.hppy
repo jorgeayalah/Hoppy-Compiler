@@ -1,7 +1,12 @@
 program main
 int :: i,n
 real :: x
+string :: greeting
+bool :: yes, no, idk
+
 print(n)
 print(x)
+print(greeting)
+print(no)
 
 end program main

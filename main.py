@@ -3,7 +3,7 @@ from Parser import Parser
 # import os
 
 # print("Current working directory:", os.getcwd())
-f = open("micompa/input.beer", "r")
+f = open("micompa/input.hppy", "r")
 text_input = f.read()
 
 lexer = Lexer().get_lexer()

@@ -65,7 +65,7 @@ class SymbolValue(BaseBox): #   The linked "row" in the 'value' of the hash tabl
             elif self.type == "string":
                 return float(self.value)
             elif self.type == "bool":
-                return float(self.value)
+                return bool(self.value)
             else:
                 raise ValueError("Value is not a valid type")
         return None

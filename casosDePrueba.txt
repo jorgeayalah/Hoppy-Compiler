@@ -12,7 +12,7 @@ else {
 }
 end program main
 
-############################
+##############  WHILE ##############
 
 program main
 int :: x = 15
@@ -21,4 +21,18 @@ while(x > 10) do {
     x = x - 1
     print(x)
 }
+end program main
+
+##############  NONE DECLARATIONS ##############
+program main
+int :: i,n
+real :: x
+string :: greeting
+bool :: yes, no, idk
+
+print(n)
+print(x)
+print(greeting)
+print(no)
+
 end program main
