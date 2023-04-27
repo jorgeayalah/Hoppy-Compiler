@@ -1,8 +1,12 @@
 program main
-int :: x = 15
-while(x > 10) do {
-    print("hola")
-    x = x - 1
-    print(x)
+int :: n = 0
+int :: x = 1
+int :: f = 5
+print("texto dump")
+int :: count = 0
+for (x;x<f;x=x+1){
+    count = count + 1
+	n = x + f
+    print(count)
 }
 end program main

@@ -169,22 +169,28 @@ class If:
         return None
 
 class WhileLoop:
-    def __init__(self, condition, while_body):
+    def __init__(self, condition, function):
         self.condition = condition
-        self.while_body = while_body
+        self.function = function
 
     def eval(self):
         while(self.condition.eval() is True):   #   if true, do body
-            self.while_body.eval()
+            self.function.eval()
 
 class ForLoop:
-    def __init__(self, time, function):
-        self.time = time
+    def __init__(self, id, condition, proc, function):
+        self.id = Identifier(id.getstr())
+        self.condition = condition
+        self.proc = proc
         self.function = function
         
     def eval(self):
-        for x in range(self.time.eval()):
-            self.function.eval()
+        if(self.id.eval() in sytab.dict.keys()): #   meaning a variable with name id exists
+            while(self.condition.eval() is True):   #   if true, do body
+                self.function.eval()
+                self.proc.eval()    # applies procedure (i += 1)
+        else:
+            raise RuntimeError("Variable not declared can not be used in loop: ", self.id.eval())
         
 class Variable:
     def __init__(self, id):
